@@ -1,0 +1,60 @@
+{% extends "base/main.html" %}
+{% block content %}
+    <div class="header-bar">
+    <div>
+        <h1> Hello {{ request.user|title }}</h1>
+        <h3 style="margin: 0">You have <i>{{ count }}</i> incomplete task{{ count|pluralize:"s" }}</h3>
+    </div>
+
+    </div>
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily tasks</title>
+</head>
+<body>
+
+{% if request.user.is_authenticated %}
+    <p>{{ request.user }}</p>
+    <a href="{% url 'logout' %}">Logout</a>
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
+
+<hr>
+<h2>My daily tasks</h2>
+<a href="{% url 'task-create' %}">Add Task</a>
+
+<form method="get">
+    <input type="text" name="search-area" value = "{{search_input}}">
+    <input type="submit" value="search">
+</form>
+<table>
+    <tr>
+        <th>Item</th>
+        <th></th>
+        <th></th>
+
+    </tr>
+    {% for task in tasks %}
+
+        <tr>
+            <td>{{ task.title }}</td>
+
+            <td><a href="{% url 'task-update' task.id %}">Edit</a></td>
+            <td><a href="{% url 'task-del' task.id %}">Delete</a></td>
+        </tr>
+        {% empty %}
+        <h3>no items in list</h3>
+
+    {% endfor %}
+</table>
+
+</body>
+</html>
+
+{% endblock %}
